@@ -1,12 +1,18 @@
 # VPC and subnets shared from the AWS_Networking workspace
-data "tfe_outputs" "network" {
-  organization = "hello-cloud-learning"
-  workspace    = "AWS_Networking"
+data "terraform_remote_state" "network" {
+  backend = "remote"
+
+  config = {
+    organization = "hello-cloud-learning"
+    workspaces = {
+      name = "AWS_Networking"
+    }
+  }
 }
 
 locals {
-  vpc_id           = data.tfe_outputs.network.nonsensitive_values.vpc_id
-  public_subnet_id = data.tfe_outputs.network.nonsensitive_values.public_subnet_ids[0]
+  vpc_id           = data.terraform_remote_state.network.outputs.vpc_id
+  public_subnet_id = data.terraform_remote_state.network.outputs.public_subnet_ids[0]
 }
 
 # Latest Amazon Linux 2023 AMI
