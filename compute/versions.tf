@@ -3,7 +3,7 @@ terraform {
     organization = "hello-cloud-learning"
 
     workspaces {
-      name = "AWS_Networking"
+      name = "AWS_Compute"
     }
   }
 
@@ -11,6 +11,10 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 6.0"
+    }
+    tfe = {
+      source  = "hashicorp/tfe"
+      version = "~> 0.60"
     }
   }
 }
