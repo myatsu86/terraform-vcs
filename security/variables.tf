@@ -21,3 +21,13 @@ variable "aws_profile" {
   type        = string
   default     = null
 }
+
+variable "my_ip_cidr" {
+  description = "Your public IP in CIDR form (e.g. 203.0.113.10/32), allowed to reach the dashboard instance"
+  type        = string
+
+  validation {
+    condition     = can(cidrhost(var.my_ip_cidr, 0)) && var.my_ip_cidr != "0.0.0.0/0"
+    error_message = "my_ip_cidr must be a valid CIDR and must not be 0.0.0.0/0."
+  }
+}

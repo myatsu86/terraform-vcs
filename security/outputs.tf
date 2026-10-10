@@ -1,4 +1,9 @@
-output "allow_all_security_group_id" {
-  description = "ID of the allow-all security group"
-  value       = aws_security_group.allow_all.id
+output "dashboard_security_group_id" {
+  description = "ID of the dashboard security group"
+  value       = aws_security_group.dashboard.id
+}
+
+output "counting_security_group_id" {
+  description = "ID of the counting security group"
+  value       = aws_security_group.counting.id
 }

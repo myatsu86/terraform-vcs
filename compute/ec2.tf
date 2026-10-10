@@ -23,7 +23,8 @@ data "terraform_remote_state" "security" {
 }
 
 locals {
-  security_group_id = data.terraform_remote_state.security.outputs.allow_all_security_group_id
+  dashboard_sg_id   = data.terraform_remote_state.security.outputs.dashboard_security_group_id
+  counting_sg_id    = data.terraform_remote_state.security.outputs.counting_security_group_id
   private_subnet_id = data.terraform_remote_state.network.outputs.private_subnet_ids[0]
 }
 
@@ -41,7 +42,7 @@ resource "aws_instance" "counting" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   subnet_id                   = local.private_subnet_id
-  vpc_security_group_ids      = [local.security_group_id]
+  vpc_security_group_ids      = [local.counting_sg_id]
   associate_public_ip_address = false
 
   user_data                   = file("${path.module}/../scripts/counting-service.sh")
@@ -56,7 +57,7 @@ resource "aws_instance" "dashboard" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   subnet_id                   = data.terraform_remote_state.network.outputs.public_subnet_ids[1]
-  vpc_security_group_ids      = [local.security_group_id]
+  vpc_security_group_ids      = [local.dashboard_sg_id]
   associate_public_ip_address = true
 
   user_data = templatefile("${path.module}/../scripts/dashboard-service.sh", {
