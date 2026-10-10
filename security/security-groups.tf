@@ -66,6 +66,15 @@ resource "aws_vpc_security_group_ingress_rule" "counting_9000" {
   to_port                      = 9000
 }
 
+resource "aws_vpc_security_group_ingress_rule" "counting_ssh" {
+  security_group_id            = aws_security_group.counting.id
+  description                  = "SSH from dashboard"
+  referenced_security_group_id = aws_security_group.dashboard.id
+  ip_protocol                  = "tcp"
+  from_port                    = 22
+  to_port                      = 22
+}
+
 resource "aws_vpc_security_group_egress_rule" "counting_all" {
   security_group_id = aws_security_group.counting.id
   description       = "All outbound"

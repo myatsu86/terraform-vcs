@@ -41,6 +41,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "counting" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
+  key_name                    = var.key_name
   subnet_id                   = local.private_subnet_id
   vpc_security_group_ids      = [local.counting_sg_id]
   associate_public_ip_address = false
@@ -56,6 +57,7 @@ resource "aws_instance" "counting" {
 resource "aws_instance" "dashboard" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
+  key_name                    = var.key_name
   subnet_id                   = data.terraform_remote_state.network.outputs.public_subnet_ids[1]
   vpc_security_group_ids      = [local.dashboard_sg_id]
   associate_public_ip_address = true
